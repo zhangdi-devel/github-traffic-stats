@@ -233,10 +233,17 @@ def main():
     organization = username
     if args.organization != None:
         organization = args.organization.strip()
-
-    pw = getpass.getpass('Password:')
-    auth_pair = (username, pw)
+    
     traffic_headers = {'Accept': 'application/vnd.github.spiderman-preview'}
+
+    if ":" in username:
+        username, token = username.split(":")
+        auth_pair=None
+        traffic_headers['Authorization'] = 'token {}'.format(token)
+    else:
+        pw = getpass.getpass('Password:')
+        auth_pair = (username, pw)
+
 
     if repo == 'ALL':
         # By default iterate over all repositories
